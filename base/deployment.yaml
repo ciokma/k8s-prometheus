@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prometheus
+  namespace: devops-monitoring
+  labels:
+    app.kubernetes.io/name: prometheus
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: prometheus
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: prometheus
+    spec:
+      securityContext:
+        runAsUser: 1000  # Usuario 'ubuntu'
+        runAsGroup: 1000 # Grupo 'ubuntu'
+        fsGroup: 1000    # Asegura permisos de grupo para volúmenes
+      containers:
+      - name: prometheus
+        image: prom/prometheus:v2.53.2 # cambiar imagen a catálogo de RedHat si es necesario
+        args:
+          - "--config.file=/etc/prometheus/prometheus.yml"
+          - "--storage.tsdb.path=/prometheus"
+        ports:
+          - containerPort: 9090
+        volumeMounts:
+          - name: prometheus-storage
+            mountPath: /prometheus
+          - name: prometheus-config
+            mountPath: /etc/prometheus
+        securityContext:
+          runAsUser: 1000  # Usuario 'ubuntu'
+          runAsGroup: 1000  # Grupo 'ubuntu'
+      volumes:
+        - name: prometheus-storage
+          hostPath:
+            path: /data/prometheus  # Ruta en el nodo donde se guardarán los datos de Prometheus
+            type: DirectoryOrCreate
+        - name: prometheus-config
+          configMap:
+            name: prometheus-config

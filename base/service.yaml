@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus
+  namespace: devops-monitoring
+  labels:
+    app.kubernetes.io/name: prometheus
+spec:
+  type: ClusterIP
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+    - port: 9090
+      targetPort: 9090
+      protocol: TCP
+  sessionAffinity: None
+  internalTrafficPolicy: Cluster
+  selector:
+    app.kubernetes.io/name: prometheus

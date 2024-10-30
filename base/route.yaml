@@ -1,0 +1,18 @@
+# apiVersion: route.openshift.io/v1
+# kind: Route
+# metadata:
+#   name: prometheus
+#   namespace: devops-monitoring
+#   labels:
+#     app.kubernetes.io/name: prometheus
+#     app.kubernetes.io/version: 1.0.0
+#   annotations:
+#     openshift.io/host.generated: 'true'
+# spec:
+#   to:
+#     kind: Service
+#     name: prometheus
+#     weight: 100
+#   tls:
+#     termination: edge
+#   wildcardPolicy: None
