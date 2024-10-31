@@ -21,7 +21,7 @@ spec:
         fsGroup: 1000    # Asegura permisos de grupo para volúmenes
       containers:
       - name: prometheus
-        image: prom/prometheus:v2.53.2 # cambiar imagen a catálogo de RedHat si es necesario
+        image: prom/prometheus:v2.53.2 # Cambiar imagen a catálogo de RedHat si es necesario
         args:
           - "--config.file=/etc/prometheus/prometheus.yml"
           - "--storage.tsdb.path=/prometheus"
@@ -37,9 +37,7 @@ spec:
           runAsGroup: 1000  # Grupo 'ubuntu'
       volumes:
         - name: prometheus-storage
-          hostPath:
-            path: /data/prometheus  # Ruta en el nodo donde se guardarán los datos de Prometheus
-            type: DirectoryOrCreate
+          emptyDir: {}  # Almacenamiento temporal que se elimina cuando el pod se destruye
         - name: prometheus-config
           configMap:
             name: prometheus-config
