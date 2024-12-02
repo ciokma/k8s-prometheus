@@ -19,4 +19,4 @@ scrape_configs:
     scheme: http
     enable_http2: true
     static_configs:
-      - targets: ['172.31.16.185:9100']
+      - targets: ['172.31.16.185:9100', '172.31.25.116:9100']
